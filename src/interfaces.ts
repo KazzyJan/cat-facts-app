@@ -3,12 +3,12 @@ export interface UserName {
     last: string;
   }
 
-  export interface User {
+export interface User {
     _id: string;
     name: UserName;
   }
 
-  export interface CatFact {
+export interface CatFact {
     _id: string;
     __v: number;
     updatedAt: DataTransfer;
@@ -19,8 +19,29 @@ export interface UserName {
     user: User;
   }
 
-  export interface Translations {
-    [key: string]: {
-      this_expressions: { [key: string]: string };
-    };
+ export interface Translations {
+     [key: string]: {
+       this_expressions: { [key: string]: string };
+     }
+   }
+
+export interface RootState {
+    selected_locale: string;
   }
+
+// export interface Translations {
+//     [key: string]: string
+//   }
+  
+export interface ThisExpressions {
+    [key: string]: string
+  }
+  
+ export interface ThisExpressionsTranslations {
+     this_expressions: ThisExpressions
+   }
+  
+// export interface TranslationsLocale {
+//     en: ThisExpressionsTranslations
+//     ru: ThisExpressionsTranslations
+//   }

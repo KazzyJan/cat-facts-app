@@ -4,7 +4,7 @@
     <v-progress-linear v-if="loading" indeterminate color="green"></v-progress-linear>
     <v-btn
     v-if="!loading"
-    @click="$store.dispatch('fetchData')">{{ translations[locale].this_expressions['update'] }}</v-btn>
+    @click="updateRecords">{{ translations[locale].this_expressions['update'] }}</v-btn>
     <label for="quantity">{{ translations[locale].this_expressions['numOfRec'] }} </label>
     <select id="quantity" v-model="$store.state.selectedCountRecords">
       <option v-for="quantity in $store.state.listRecordsCounts" :key="quantity" :value="quantity">{{ quantity }}</option>
@@ -18,7 +18,7 @@
       item-key="_id"
     >
       <template v-slot:item.text="{ item }">
-          <span>{{ slice(item.text, 50) }}</span>
+          <span>{{ slice(item, 50) }}</span>
         </template>
         <template v-slot:item.actions="{ item }">
           <v-btn @click="goToRecord(item._id)" text>
@@ -31,10 +31,10 @@
 
 <script lang="ts">
     import Vue from 'vue'
-    // import { Translations } from '../interfaces'
+    import { CatFact, ThisExpressions, Translations } from '../interfaces'
     import { VAlert, VBtn, VDataTable } from 'vuetify/lib'
 
-  let en_expressions: { [key: string]: string } = {
+  let en_expressions: ThisExpressions = {
     "h1": "Cat Facts",
     "record": "Fact",
     "more": "More",
@@ -43,7 +43,7 @@
     "update": "Update",
     "numOfRec": "Number of records"
   };
-  let ru_expressions: { [key: string]: string } = {
+  let ru_expressions: ThisExpressions = {
     "h1": "Факты о кошках",
     "record": "Факт",
     "more": "Подробнее",
@@ -52,14 +52,7 @@
     "update": "Обновить данные",
     "numOfRec": "Количество записей"
   };
-  let translations: {
-    en: {
-    this_expressions: { [key: string]: string }
-    },
-    ru: {
-      this_expressions: { [key: string]: string }
-    }
-    } = {
+  let translations: Translations = {
     en: {
       this_expressions: en_expressions
     },
@@ -70,20 +63,20 @@
     export default Vue.extend({
       computed: {
         currentPage: {
-          get() {
+          get(): number {
             return this.$store.state.currentPage
           },
-          set(page) {
+          set(page: string): void {
             this.$store.commit('setCurrentPage', page)
           }
         },
-        locale: function() {
+        locale: function():string {
           return this.$store.state.selected_locale;
         },
-        loading() {
+        loading(): boolean {
           return this.$store.state.loading;
         },
-        records() {
+        records(): CatFact[]{
           return this.$store.state.records;
         },
         headers(): { text: string, value: string, sortable?:boolean, fixed?: boolean, width?: number }[] {
@@ -115,35 +108,35 @@
         translations: {
           en: {
             this_expressions: en_expressions
-          },
+            },
           ru: {
             this_expressions: ru_expressions
-          }
-         }as {
-           [key: string]: {
-             this_expressions: { [key: string]: string };
-           };
-         },
+            }
+          } as Translations
         }
       },
       methods: {
-        setCountRecords(){
+        setCountRecords(): void{
         this.$store.commit("setCountRecords", this.$store.state.selectedCountRecords)
       },
-        goToRecord(id: string) {
+        goToRecord(id: string): void {
           this.$router.push(`/record/${id}`);
         },
-        slice(value: string ,maxLenght: number){
-          if(value.length>50){ return value.slice(0, maxLenght) + "..."}
-          else {return value}
+        slice(item: CatFact ,maxLenght: number): string{
+          if(item.text.length>50){ return item.text.slice(0, maxLenght) + "..."}
+          else {return item.text}
         },
+        updateRecords(): void{
+        this.$store.dispatch('fetchData');
+        this.$store.commit('setCurrentPage', 0);
+        }
       },
       created() {
         if (this.$store.state.records.length == 0) {
           this.$store.dispatch('fetchData');
         }
       }
-    })   
+    })
     </script>
 
 <style scoped>

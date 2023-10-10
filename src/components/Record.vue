@@ -20,9 +20,9 @@
 <script lang="ts">
 import Vue from 'vue'
 import axios from 'axios'
-import { CatFact } from '../interfaces'
+import { CatFact, ThisExpressions, Translations } from '../interfaces'
 
-let en_expressions: { [key: string]: string } = {
+let en_expressions: ThisExpressions = {
   "h1": "Cat Fact",
   "id": "ID: ",
   "user": "User: ",
@@ -32,7 +32,7 @@ let en_expressions: { [key: string]: string } = {
   "source": "Source: ",
   "type": "Type: "
 };
-let ru_expressions: { [key: string]: string } = {
+let ru_expressions: ThisExpressions = {
   "h1": "Факт о кошках",
   "id": "ИД: ",
   "user": "Пользователь: ",
@@ -44,7 +44,7 @@ let ru_expressions: { [key: string]: string } = {
 };
 export default Vue.extend({
   computed: {
-    locale() {
+    locale(): string {
       return this.$store.state.selected_locale;
     },
   },
@@ -58,15 +58,11 @@ export default Vue.extend({
         ru: {
           this_expressions: ru_expressions
         }
-      }as {
-        [key: string]: {
-          this_expressions: { [key: string]: string };
-        };
-      }
+      }as Translations
     }
   },
   methods: {
-    goBack() {
+    goBack(): void {
       this.$router.push('/records')
     },
   },

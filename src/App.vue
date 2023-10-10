@@ -5,8 +5,8 @@
       color="dark"
       dark
       >
-      <v-btn @click="localeRu()"> Русский язык</v-btn>
-      <v-btn @click="localeEn()"> English language</v-btn>
+      <v-btn @click="localeRu"> Русский язык</v-btn>
+      <v-btn @click="localeEn"> English language</v-btn>
     </v-app-bar>
     <v-main> 
       <router-view/>
@@ -15,20 +15,23 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue from 'vue'
+import { RootState } from './interfaces'
+
 
 export default Vue.extend({
+  
   name: 'App',
   computed: {
-    locale() {
-      return this.$store.state.selected_locale;
+    locale(): string {
+      return (this.$store.state as RootState).selected_locale;
     },
   },
   methods: {
-    localeRu() {
+    localeRu(): void {
       this.$store.commit('CHANGE_LOCALE', 'ru');
     },
-    localeEn() {
+    localeEn(): void {
       this.$store.commit('CHANGE_LOCALE', 'en');
     },
   },
