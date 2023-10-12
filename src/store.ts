@@ -12,6 +12,7 @@ interface State {
   selectedCountRecords: number;
   listRecordsCounts: [10, 50, 100, 300, 500];
   currentPage: number;
+  rowsPerPage:number;
 }
 
 const store: StoreOptions<State> = {
@@ -22,24 +23,28 @@ const store: StoreOptions<State> = {
     selectedCountRecords: 10,
     listRecordsCounts: [10, 50, 100, 300, 500],
     currentPage: 1,
+    rowsPerPage:10,
   },
   mutations: {
-    setCurrentPage(state, page) {
-      state.currentPage = page
+     setRowPerPage(state:State,count: number){
+       state.rowsPerPage = count;
+     },
+    setCurrentPage(state:State, page:number) {
+      state.currentPage = page;
     },
-    setCountRecords(state, countRecords: number){
+    setCountRecords(state: State, countRecords: number){
       state.selectedCountRecords = countRecords;
     },
-    CHANGE_LOCALE(state, locale: string) {
+    CHANGE_LOCALE(state: State, locale: string) {
       state.selected_locale = locale;
     },
-    setRecords(state, records) {
+    setRecords(state: State, records:CatFact[]) {
       state.records = records;
     },
-    updateRecords(state, newRecords) {
+    updateRecords(state: State, newRecords:CatFact[]) {
       state.records = newRecords;
     },
-    setLoading(state, loading: boolean) {
+    setLoading(state: State, loading: boolean) {
       state.loading = loading;
     },
   },

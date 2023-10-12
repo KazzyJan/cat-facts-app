@@ -1,38 +1,46 @@
 <template>
   <div>
     <h1> {{ translations[locale].this_expressions['h1'] }} </h1>
-    <v-progress-linear v-if="loading" indeterminate color="green"></v-progress-linear>
-    <v-btn
-    v-if="!loading"
-    @click="updateRecords">{{ translations[locale].this_expressions['update'] }}</v-btn>
-    <label for="quantity">{{ translations[locale].this_expressions['numOfRec'] }} </label>
-    <select id="quantity" v-model="$store.state.selectedCountRecords">
-      <option v-for="quantity in $store.state.listRecordsCounts" :key="quantity" :value="quantity">{{ quantity }}</option>
-    </select>
-    <loading v-if="loading">{{ translations[locale].this_expressions['loading'] }}</loading>
-    <v-data-table
-      v-if="!loading"
-      :headers="headers"
-      :items="records"
-      :page.sync="currentPage"
-      item-key="_id"
-    >
-      <template v-slot:item.text="{ item }">
-          <span>{{ slice(item, 50) }}</span>
+    <v-progress-linear class="progress-linear" v-if="loading" indeterminate color="green" height="10"></v-progress-linear>
+    <div v-if="!loading">
+      <v-btn
+      class="updateButton"
+      @click="updateRecords">{{ translations[locale].this_expressions['update'] }}</v-btn>
+      <div class="numOfRec">
+        <label for="quantity">{{ translations[locale].this_expressions['numOfRec'] }} </label>
+        <select id="quantity" v-model="$store.state.selectedCountRecords">
+          <option v-for="quantity in $store.state.listRecordsCounts" :key="quantity" :value="quantity">{{ quantity }}</option>
+        </select>
+      </div>
+    </div>
+    <div>
+      <loading class="loading" v-if="loading">{{ translations[locale].this_expressions['loading'] }}</loading>
+      <v-data-table
+        class="table"
+        v-else
+        :items-per-page.sync= $store.state.rowsPerPage
+        :headers="headers"
+        :items="records"
+        :page.sync="currentPage"
+        item-key="_id"
+      >
+        <template v-slot:item.text="{ item }">
+          <span class="recordColumn">{{ slice(item, 100) }}</span>
         </template>
         <template v-slot:item.actions="{ item }">
-          <v-btn @click="goToRecord(item._id)" text>
+          <v-btn class="moreButton" @click="goToRecord(item._id)" text>
             {{ translations[locale].this_expressions['more'] }}
           </v-btn>
         </template>
       </v-data-table>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
     import Vue from 'vue'
     import { CatFact, ThisExpressions, Translations } from '../interfaces'
-    import { VAlert, VBtn, VDataTable } from 'vuetify/lib'
+    import { VBtn, VDataTable } from 'vuetify/lib'
 
   let en_expressions: ThisExpressions = {
     "h1": "Cat Facts",
@@ -66,7 +74,7 @@
           get(): number {
             return this.$store.state.currentPage
           },
-          set(page: string): void {
+          set(page: number): void {
             this.$store.commit('setCurrentPage', page)
           }
         },
@@ -96,7 +104,7 @@
     VBtn
     },
     mounted() {
-    this.currentPage = localStorage.getItem('currentPage') || 1
+    this.currentPage = Number(localStorage.getItem('currentPage') || 1)
     },
     watch: {
       currentPage(page) {
@@ -140,7 +148,62 @@
     </script>
 
 <style scoped>
-h2 {
-  color: #333;
+h1 {
+  color: #000000;
+  text-align: center;
+  width: 100%;
 }
+
+label {
+  margin-bottom: 10px;
+}
+
+select {
+  width: 40px;
+  border: 1px solid #4f4f4f;
+  border-radius: 4px;
+  text-align: center;
+}
+
+.progress-linear{
+  line-height: 40px;
+}
+
+
+.updateButton{
+  display: block;
+  float: right;
+  margin-right: 75px;
+}
+
+.table{
+  margin-top: 25px;
+}
+
+.numOfRec{
+  display: inline-block;
+  margin-left: 50px;
+  margin-top: 10px;
+}
+
+.recordColumn{
+  margin-left: 20px;
+}
+
+.moreButton{
+  margin-left: 100px;
+}
+
+.table.th{
+  padding-left: 100px;
+  text-align: left;
+}
+
+.loading{
+  display: block;
+  text-align: center;
+  width: 100%;
+}
+
+
 </style>
