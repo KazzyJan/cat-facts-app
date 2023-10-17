@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     <h1> {{ translations[locale].this_expressions['h1'] }} </h1>
     <v-progress-linear class="progress-linear" v-if="loading" indeterminate color="green" height="10"></v-progress-linear>
     <div v-if="!loading">
@@ -34,7 +34,7 @@
         </template>
       </v-data-table>
     </div>
-  </div>
+  </main>
 </template>
 
 <script lang="ts">

@@ -1,19 +1,21 @@
 <template>
-  <v-app>
-    <v-app-bar
-      app
-      color="dark"
-      dark
-      >
-      <v-row class="justify-end">
-        <v-btn @click="localeRu"> Русский язык</v-btn>
-        <v-btn @click="localeEn"> English language</v-btn>
-      </v-row>
-    </v-app-bar>
-    <v-main> 
-      <router-view/>
-    </v-main>
-  </v-app>
+  <header>
+    <v-app>
+      <v-app-bar
+        app
+        color="dark"
+        dark
+        >
+        <v-row class="justify-end">
+          <v-btn @click="localeRu"> Русский язык</v-btn>
+          <v-btn @click="localeEn"> English language</v-btn>
+        </v-row>
+      </v-app-bar>
+      <v-main> 
+        <router-view/>
+      </v-main>
+    </v-app>
+  </header>
 </template>
 
 <script lang="ts">

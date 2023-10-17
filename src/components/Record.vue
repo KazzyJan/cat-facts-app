@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <main>
       <h1> {{ translations[locale].this_expressions['h1'] }} </h1>
       <div v-if="!record">
         <v-progress-linear class="progress-linear" indeterminate color="green" height="10"></v-progress-linear>
@@ -23,7 +23,7 @@
           <v-btn class="backButton" @click="goBack">{{ translations[locale].this_expressions['goBack'] }}</v-btn>
         </div>
       </div>
-    </div>
+    </main>
 </template>
 
 <script lang="ts">
